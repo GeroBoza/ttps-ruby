@@ -14,8 +14,30 @@ module RN
         ]
 
         def call(title:, **options)
-          book = options[:book]
-          warn "TODO: Implementar creación de la nota con título '#{title}' (en el libro '#{book}').\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+            book = options[:book]
+            #   warn "TODO: Implementar creación de la nota con título '#{title}' (en el libro '#{book} ').\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+            
+            if book != nil
+                path = "#{Dir.home}/.my_rns/#{book}/#{title}"   
+                     
+            else
+                path = "#{Dir.home}/.my_rns/#{title}"
+            end
+
+            extension = "rn"
+            dir = File.dirname(path)
+            # puts dir
+            # return
+  
+            unless File.directory?(dir)
+                #   FileUtils.mkdir_p(dir)
+                warn "El libro '#{book}' no existe, por favor creelo utilizando los comandos rn book create 'NOMBRE'"
+                return
+            end
+  
+            path << ".#{extension}"
+            File.new(path, 'w')
+
         end
       end
 
