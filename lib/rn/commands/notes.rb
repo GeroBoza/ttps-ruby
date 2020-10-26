@@ -1,41 +1,56 @@
+require_relative "path"
 module RN
   module Commands
     module Notes
       class Create < Dry::CLI::Command
+        include Path
         desc 'Create a note'
 
         argument :title, required: true, desc: 'Title of the note'
         option :book, type: :string, desc: 'Book'
+        option :description, type: :string, desc: 'Description'
 
-        example [
-          'todo                        # Creates a note titled "todo" in the global book',
-          '"New note" --book "My book" # Creates a note titled "New note" in the book "My book"',
-          'thoughts --book Memoires    # Creates a note titled "thoughts" in the book "Memoires"'
-        ]
+        # example [
+        #   'todo                        # Creates a note titled "todo" in the global book',
+        #   '"New note" --book "My book" # Creates a note titled "New note" in the book "My book"',
+        #   'thoughts --book Memoires    # Creates a note titled "thoughts" in the book "Memoires"'
+        # ]
 
         def call(title:, **options)
-            book = options[:book]
-            #   warn "TODO: Implementar creación de la nota con título '#{title}' (en el libro '#{book} ').\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
             
+            book = options[:book]
+
+            # CHEQUEO QUE EL DIRECTORIO PRINCIPAL MY_RNS EXISTA, SI NO EXISTE SE CREA POR UNICA VEZ
+            check_my_rns()
+
+            # SI LLEGA COMO PARAMETRO UN BOOK SE SELECCIONA EL PATH CON EL BOOK CORRESPONDIENTE
+            # SINO EL PATH INDICA EL DIRECTORIO GLOBAL MY_RNS
             if book != nil
                 path = "#{Dir.home}/.my_rns/#{book}/#{title}"   
-                     
             else
                 path = "#{Dir.home}/.my_rns/#{title}"
             end
 
+            
+
             extension = "rn"
             dir = File.dirname(path)
-            # puts dir
-            # return
   
+            # SI NO EXISTE EL BOOK INDICADO SE CANCELA LA CREACION DE LA NOTA Y SE INDICA EL ERROR
             unless File.directory?(dir)
-                #   FileUtils.mkdir_p(dir)
                 warn "El libro '#{book}' no existe, por favor creelo utilizando los comandos rn book create 'NOMBRE'"
                 return
             end
   
             path << ".#{extension}"
+
+            # VALIDO QUE NO EXISTA EL ARCHIVO
+            # SI EXISTE SE CANCELA LA CREACION
+            if File.exist?(path)
+                warn "El archivo '#{title}' ya existe"
+                return
+            end
+
             File.new(path, 'w')
 
         end
