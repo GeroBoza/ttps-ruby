@@ -105,10 +105,6 @@ module RN
       class List < Dry::CLI::Command
         desc 'List books'
 
-        # example [
-        #   '          # Lists every available book'
-        # ]
-
         def call(*)
             path = "#{Dir.home}/.my_rns"
             Dir.foreach(path) do |f|
