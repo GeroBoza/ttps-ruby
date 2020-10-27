@@ -1,37 +1,83 @@
+require_relative "path"
 module RN
   module Commands
     module Books
       class Create < Dry::CLI::Command
+        include Path
         desc 'Create a book'
 
         argument :name, required: true, desc: 'Name of the book'
 
-        example [
-          '"My book" # Creates a new book named "My book"',
-          'Memoires  # Creates a new book named "Memoires"'
-        ]
+        # example [
+        #   '"My book" # Creates a new book named "My book"',
+        #   'Memoires  # Creates a new book named "Memoires"'
+        # ]
 
         def call(name:, **)
-          warn "TODO: Implementar creación del cuaderno de notas con nombre '#{name}'.\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+            
+            #VALIDO QUE EL NOMBRE DEL DIRECTORIO NO CONTENGA EL CARACTER '/'
+            if name.match("/") 
+                warn "El titulo del libro no puede contener el caracter '/'"
+                return
+            end
+
+            # CHEQUEO QUE EXISTA EL DIRECTORIO MY RNS, SINO LO CREO JUNTO CON EL DIRECTORIO GLOBAL DE ARCHIVOS
+            check_my_rns()
+
+            # CREO EL PATH DONDE SE VA A CREAR EL DIRECTORIO
+            path = "#{Dir.home}/.my_rns/#{name}"
+
+        
+            # SI NO EXISTE EL BOOK INDICADO SE CREA
+            unless File.directory?(path)
+                Dir.mkdir(path)
+                puts "El libro fue creado con exito!"
+                return
+            end
+
+            warn "El libro '#{name}' ya existe"
+            return
+
         end
       end
 
       class Delete < Dry::CLI::Command
-        desc 'Delete a book'
+            desc 'Delete a book'
 
-        argument :name, required: false, desc: 'Name of the book'
-        option :global, type: :boolean, default: false, desc: 'Operate on the global book'
+            argument :name, required: false, desc: 'Name of the book'
+            option :global, type: :boolean, default: false, desc: 'Operate on the global book'
 
-        example [
-          '--global  # Deletes all notes from the global book',
-          '"My book" # Deletes a book named "My book" and all of its notes',
-          'Memoires  # Deletes a book named "Memoires" and all of its notes'
-        ]
+            example [
+            '--global  # Deletes all notes from the global book',
+            '"My book" # Deletes a book named "My book" and all of its notes',
+            'Memoires  # Deletes a book named "Memoires" and all of its notes'
+            ]
 
-        def call(name: nil, **options)
-          global = options[:global]
-          warn "TODO: Implementar borrado del cuaderno de notas con nombre '#{name}' (global=#{global}).\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
-        end
+            def call(name: nil, **options)
+                global = options[:global]
+                
+                if global 
+                    # global_path = "#{Dir.home}/.my_rns/global_book"
+                    # ACA ELIMINO LOS ARCHIVOS DEL GLOBAL BOOK
+                    puts "Los archivos de la carpeta global han sido eliminados con exito!"
+                    return
+                else
+                    path = "#{Dir.home}/.my_rns/#{name}/"   
+                end
+
+                if File.directory?(path)
+                    puts "Esta seguro que quiere eliminar el libro? Se eliminaran los archivos que contiene.. Y/N"
+                    value = STDIN.gets.chomp
+                    if value.downcase == "y"
+                        puts "El Libro y su contenido ha sido eliminado!"
+                    else
+                        puts "Su Libro no se ha eliminado"
+                    end
+                else
+                    warn "La carpeta que quiere eliminar no existe!"
+                end
+
+            end
       end
 
       class List < Dry::CLI::Command

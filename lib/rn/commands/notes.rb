@@ -8,7 +8,7 @@ module RN
 
         argument :title, required: true, desc: 'Title of the note'
         option :book, type: :string, desc: 'Book'
-        option :description, type: :string, desc: 'Description'
+        option :content, type: :string, desc: 'Content of the note'
 
         # example [
         #   'todo                        # Creates a note titled "todo" in the global book',
@@ -19,6 +19,12 @@ module RN
         def call(title:, **options)
             
             book = options[:book]
+            content = options[:content]
+
+            if title.match("/")
+                warn "El titulo de la nota no puede contener el caracter '/'"
+                return
+            end
 
             # CHEQUEO QUE EL DIRECTORIO PRINCIPAL MY_RNS EXISTA, SI NO EXISTE SE CREA POR UNICA VEZ
             check_my_rns()
@@ -28,7 +34,7 @@ module RN
             if book != nil
                 path = "#{Dir.home}/.my_rns/#{book}/#{title}"   
             else
-                path = "#{Dir.home}/.my_rns/#{title}"
+                path = "#{Dir.home}/.my_rns/global_book/#{title}"
             end
 
             
@@ -51,7 +57,13 @@ module RN
                 return
             end
 
-            File.new(path, 'w')
+            # File.open(path, 'w'){|f| f.write(content)}
+            new_note = File.new(path, 'w')
+            new_note.puts(content)
+            new_note.close
+
+            puts "La nota fue creada con exito!"
+            return
 
         end
       end
