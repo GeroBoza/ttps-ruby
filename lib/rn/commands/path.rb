@@ -10,4 +10,12 @@ module Path
         end
     end
 
+    def valid_name?(a_name)
+        if a_name.match("/")
+            return false
+        else 
+            return true
+        end
+    end
+
 end

@@ -17,7 +17,7 @@ module RN
         def call(name:, **)
             
             #VALIDO QUE EL NOMBRE DEL LIBRO NO CONTENGA EL CARACTER '/'
-            if name.match("/") 
+            if !valid_name?(name)
                 warn "El titulo del libro no puede contener el caracter '/'"
                 return
             end
@@ -116,6 +116,7 @@ module RN
 
       class Rename < Dry::CLI::Command
         desc 'Rename a book'
+        include Path
 
         argument :old_name, required: true, desc: 'Current name of the book'
         argument :new_name, required: true, desc: 'New name of the book'
@@ -135,11 +136,13 @@ module RN
                 return
             end
 
-             #VALIDO QUE EL NUEVO NOMBRE DEL LIBRO NO CONTENGA EL CARACTER '/'
-             if new_name.match("/") 
+            #VALIDO QUE EL NUEVO NOMBRE DEL LIBRO NO CONTENGA EL CARACTER '/'
+            if !valid_name?(new_name) 
                 warn "El titulo del libro no puede contener el caracter '/'"
                 return
             end
+
+            # FALTA CHEQUEAR QUE EXISTA EL LIBRO QUE QUIERO EDITAR
 
             FileUtils.mv "#{path}/#{old_name}", "#{path}/#{new_name}"
             puts "El libro #{old_name} ha sido renombrado por #{new_name}"
