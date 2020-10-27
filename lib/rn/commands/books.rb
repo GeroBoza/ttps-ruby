@@ -1,4 +1,5 @@
 require_relative "path"
+require 'fileutils'
 module RN
   module Commands
     module Books
@@ -44,37 +45,58 @@ module RN
       class Delete < Dry::CLI::Command
             desc 'Delete a book'
 
+            
             argument :name, required: false, desc: 'Name of the book'
             option :global, type: :boolean, default: false, desc: 'Operate on the global book'
-
+            
             example [
-            '--global  # Deletes all notes from the global book',
-            '"My book" # Deletes a book named "My book" and all of its notes',
-            'Memoires  # Deletes a book named "Memoires" and all of its notes'
+                '--global  # Deletes all notes from the global book',
+                '"My book" # Deletes a book named "My book" and all of its notes',
+                'Memoires  # Deletes a book named "Memoires" and all of its notes'
             ]
-
+            
             def call(name: nil, **options)
                 global = options[:global]
                 
+                # SI RECIBO EL --GLOBAL SE EJECUTA EL FOR QUE ELIMINA LOS ARCHIVOS DEL DIRECTORIO GLOBAL SIN ELIMINAR EL DIRECTORIO
                 if global 
-                    # global_path = "#{Dir.home}/.my_rns/global_book"
-                    # ACA ELIMINO LOS ARCHIVOS DEL GLOBAL BOOK
-                    puts "Los archivos de la carpeta global han sido eliminados con exito!"
-                    return
-                else
-                    path = "#{Dir.home}/.my_rns/#{name}/"   
-                end
-
-                if File.directory?(path)
-                    puts "Esta seguro que quiere eliminar el libro? Se eliminaran los archivos que contiene.. Y/N"
+                    puts "Esta seguro que quiere eliminar las notas del libro global? Y/N"
                     value = STDIN.gets.chomp
                     if value.downcase == "y"
-                        puts "El Libro y su contenido ha sido eliminado!"
+                        global_path = "#{Dir.home}/.my_rns/global_book"
+                        Dir.foreach(global_path) do |f|
+                            fn = File.join(global_path, f)
+                            File.delete(fn) if f != '.' && f != '..'
+                        end
+                        puts "Los archivos del libro global han sido eliminados con exito!"
                     else
-                        puts "Su Libro no se ha eliminado"
+                        puts "Los archivos del libro global no se han eliminado"    
+                    end
+                    return
+                else
+                    # SI NO LLEGA EL --GLOBAL ME GUARDO EL PATH CORRESPONDIENTE A EL LIBRO QUE SE QUIERE ELIMINAR
+                    path = "#{Dir.home}/.my_rns/#{name}/"   
+                end
+                
+
+                # CHEQUEO QUE NO SE INTENTE ELIMINAR EL LIBRO GLOBAL
+                if path.match("global_book")
+                    warn "El libro global no puede ser eliminado, si desea eliminar su contenido ingrese 'rn books delete --global'"
+                    return
+                end
+
+                # SI EXISTE EL LIBRO, PREGUNTO SI DESEA ELIMINARLO, SI SE INGRESA Y SE ELIMINA EL LIBRO JUNTO A LAS NOTAS QUE CONTIENE
+                if File.directory?(path) 
+                    puts "Esta seguro que quiere eliminar el libro '#{name}'? Se eliminaran las notas que contiene.. Y/N"
+                    value = STDIN.gets.chomp
+                    if value.downcase == "y"
+                        FileUtils.rm_rf(path)
+                        puts "El Libro y su contenido ha sido eliminado!"                        
+                    else
+                        puts "Su Libro no se ha eliminado"    
                     end
                 else
-                    warn "La carpeta que quiere eliminar no existe!"
+                    warn "El libro que quiere eliminar no existe!"
                 end
 
             end
@@ -83,12 +105,16 @@ module RN
       class List < Dry::CLI::Command
         desc 'List books'
 
-        example [
-          '          # Lists every available book'
-        ]
+        # example [
+        #   '          # Lists every available book'
+        # ]
 
         def call(*)
-          warn "TODO: Implementar listado de los cuadernos de notas.\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+            path = "#{Dir.home}/.my_rns"
+            Dir.foreach(path) do |f|
+                fn = File.join(path, f)
+                puts fn if f != '.' && f != '..'
+            end
         end
       end
 
