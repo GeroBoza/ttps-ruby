@@ -16,7 +16,7 @@ module RN
 
         def call(name:, **)
             
-            #VALIDO QUE EL NOMBRE DEL DIRECTORIO NO CONTENGA EL CARACTER '/'
+            #VALIDO QUE EL NOMBRE DEL LIBRO NO CONTENGA EL CARACTER '/'
             if name.match("/") 
                 warn "El titulo del libro no puede contener el caracter '/'"
                 return
@@ -120,14 +120,29 @@ module RN
         argument :old_name, required: true, desc: 'Current name of the book'
         argument :new_name, required: true, desc: 'New name of the book'
 
-        example [
-          '"My book" "Our book"         # Renames the book "My book" to "Our book"',
-          'Memoires Memories            # Renames the book "Memoires" to "Memories"',
-          '"TODO - Name this book" Wiki # Renames the book "TODO - Name this book" to "Wiki"'
-        ]
+        # example [
+        #   '"My book" "Our book"         # Renames the book "My book" to "Our book"',
+        #   'Memoires Memories            # Renames the book "Memoires" to "Memories"',
+        #   '"TODO - Name this book" Wiki # Renames the book "TODO - Name this book" to "Wiki"'
+        # ]
 
         def call(old_name:, new_name:, **)
-          warn "TODO: Implementar renombrado del cuaderno de notas con nombre '#{old_name}' para que pase a llamarse '#{new_name}'.\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+            path = "#{Dir.home}/.my_rns"
+
+            # CHEQUEO QUE NO SE QUIERA EDITAR EL LIBRO GLOBAL
+            if "#{path}/#{old_name}".match("global_book")
+                warn "El libro global no puede ser editado"
+                return
+            end
+
+             #VALIDO QUE EL NUEVO NOMBRE DEL LIBRO NO CONTENGA EL CARACTER '/'
+             if new_name.match("/") 
+                warn "El titulo del libro no puede contener el caracter '/'"
+                return
+            end
+
+            FileUtils.mv "#{path}/#{old_name}", "#{path}/#{new_name}"
+            puts "El libro #{old_name} ha sido renombrado por #{new_name}"
         end
       end
     end
