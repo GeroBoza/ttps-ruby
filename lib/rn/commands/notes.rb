@@ -1,10 +1,11 @@
 require_relative "path"
+require 'fileutils'
 module RN
   module Commands
     module Notes
       class Create < Dry::CLI::Command
         include Path
-        desc 'Create a note'
+        desc 'Create a note, options: --book --content'
 
         argument :title, required: true, desc: 'Title of the note'
         option :book, type: :string, desc: 'Book'
@@ -21,7 +22,7 @@ module RN
             book = options[:book]
             content = options[:content]
 
-            if title.match("/")
+            if !valid_name?(title)
                 warn "El titulo de la nota no puede contener el caracter '/'"
                 return
             end
@@ -50,10 +51,10 @@ module RN
   
             path << ".#{extension}"
 
-            # VALIDO QUE NO EXISTA EL ARCHIVO
+            # VALIDO QUE NO EXISTA LA NOTA
             # SI EXISTE SE CANCELA LA CREACION
             if File.exist?(path)
-                warn "El archivo '#{title}' ya existe"
+                warn "La nota '#{title}' ya existe"
                 return
             end
 
@@ -81,9 +82,31 @@ module RN
         ]
 
         def call(title:, **options)
-          book = options[:book]
-          warn "TODO: Implementar borrado de la nota con título '#{title}' (del libro '#{book}').\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
-        end
+            book = options[:book]
+            extension = "rn"
+
+            if book != nil
+                path = "#{Dir.home}/.my_rns/#{book}/#{title}"   
+            else
+                path = "#{Dir.home}/.my_rns/global_book/#{title}"
+            end
+
+            path << ".#{extension}"
+
+            if File.exist?(path)
+                puts "Esta seguro que quiere eliminar la nota '#{title}.#{extension}'? Y/N"
+                value = STDIN.gets.chomp
+                if value.downcase == "y"
+                    File.delete(path) 
+                    puts "La nota fue eliminada con exito!"
+                else
+                    puts "La nota NO se ha eliminado"
+                end
+            else 
+                puts "La nota que quiere eliminar no existe"
+            end
+
+          end
       end
 
       class Edit < Dry::CLI::Command
@@ -105,6 +128,7 @@ module RN
       end
 
       class Retitle < Dry::CLI::Command
+        include Path
         desc 'Retitle a note'
 
         argument :old_title, required: true, desc: 'Current title of the note'
@@ -118,8 +142,38 @@ module RN
         ]
 
         def call(old_title:, new_title:, **options)
-          book = options[:book]
-          warn "TODO: Implementar cambio del título de la nota con título '#{old_title}' hacia '#{new_title}' (del libro '#{book}').\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+            book = options[:book]
+            extension = "rn"
+
+            if !valid_name?(new_title)
+                warn "El titulo de la nota no puede contener el caracter '/'"
+                return
+            end
+
+            if book != nil
+                path = "#{Dir.home}/.my_rns/#{book}/#{old_title}"
+                new_path = "#{Dir.home}/.my_rns/#{book}/#{new_title}"   
+            else
+                path = "#{Dir.home}/.my_rns/global_book/#{old_title}"
+                new_path = "#{Dir.home}/.my_rns/global_book/#{new_title}"
+            end
+
+            path << ".#{extension}"
+            new_path << ".#{extension}"
+
+            if File.exist?(path)
+                if !File.exist?(new_path)
+                    FileUtils.mv path, new_path
+                    puts "El titulo de la nota '#{old_title}' ha sido cambiada por '#{new_title}'"
+                    
+                else
+                    puts "La nota con nombre: '#{new_title}' ya existe en este Libro"
+                end                    
+            else
+                warn "La nota que quiere editar no existe"
+            end
+
+
         end
       end
 

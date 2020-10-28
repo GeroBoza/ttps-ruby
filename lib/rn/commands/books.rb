@@ -43,7 +43,7 @@ module RN
       end
 
       class Delete < Dry::CLI::Command
-            desc 'Delete a book'
+            desc 'Delete a book, options: --global'
 
             
             argument :name, required: false, desc: 'Name of the book'
