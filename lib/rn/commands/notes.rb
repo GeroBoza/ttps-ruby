@@ -145,11 +145,13 @@ module RN
             book = options[:book]
             extension = "rn"
 
+            # VALIDO QUE EL NUEVO TITULO NO CONTENGA EL CARACTER /
             if !valid_name?(new_title)
                 warn "El titulo de la nota no puede contener el caracter '/'"
                 return
             end
 
+            # ME GUARDO EL PATH ANTIGUO Y EL NUEVO
             if book != nil
                 path = "#{Dir.home}/.my_rns/#{book}/#{old_title}"
                 new_path = "#{Dir.home}/.my_rns/#{book}/#{new_title}"   
@@ -161,6 +163,7 @@ module RN
             path << ".#{extension}"
             new_path << ".#{extension}"
 
+            # VERIFICO QUE LA NOTA QUE SE QUIERE EDITAR EXISTA, Y QUE EL NUEVO NOMBRE NO EXISTA EN ESE BOOK
             if File.exist?(path)
                 if !File.exist?(new_path)
                     FileUtils.mv path, new_path
@@ -191,9 +194,36 @@ module RN
         ]
 
         def call(**options)
-          book = options[:book]
-          global = options[:global]
-          warn "TODO: Implementar listado de las notas del libro '#{book}' (global=#{global}).\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+            book = options[:book]
+            global = options[:global]
+
+            # ME GUARDO EL PATH SEGUN LOS PARAMETROS RECIBIDOS
+            if global
+                path = "#{Dir.home}/.my_rns/global_book"
+            elsif book != nil
+                path = "#{Dir.home}/.my_rns/#{book}"
+            else 
+                # SI NO LLEGA NINGUN PARAMETRO RECORRO TODOS LOS LIBROS E IMPRIMO TODAS LAS NOTAS 
+                # QUE CONTIENEN LOS LIBROS DE MY_RNS
+                path = "#{Dir.home}/.my_rns" 
+                Dir.foreach(path) do |f|
+                    fn = File.join(path, f)
+                    if f != '.' && f != '..'
+                        puts Dir["#{fn}/*"]
+                    end
+                end
+                return
+            end
+            if File.exist?(path)
+                if Dir["#{path}/*"].length >0
+                    puts Dir["#{path}/*"]   
+                else
+                    puts "El libro seleccionado no contiene notas"
+                end   
+            else
+                puts "El libro ingresado no existe"
+            end
+            
         end
       end
 
@@ -210,8 +240,25 @@ module RN
         ]
 
         def call(title:, **options)
-          book = options[:book]
-          warn "TODO: Implementar vista de la nota con título '#{title}' (del libro '#{book}').\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+            book = options[:book]
+            extension = "rn"
+
+            if book != nil
+                path = "#{Dir.home}/.my_rns/#{book}/#{title}"   
+            else
+                path = "#{Dir.home}/.my_rns/global_book/#{title}"
+            end
+
+            path << ".#{extension}"
+            if File.exist?(path)
+                File.open(path, "r") do |f|
+                    f.each_line do |line|
+                    puts line
+                    end
+                end
+            else
+                puts "La nota o el libro ingresada no existe"
+            end
         end
       end
     end
