@@ -70,6 +70,7 @@ module RN
       end
 
       class Delete < Dry::CLI::Command
+        include Path
         desc 'Delete a note'
 
         argument :title, required: true, desc: 'Title of the note'
@@ -85,11 +86,9 @@ module RN
             book = options[:book]
             extension = "rn"
 
-            if book != nil
-                path = "#{Dir.home}/.my_rns/#{book}/#{title}"   
-            else
-                path = "#{Dir.home}/.my_rns/global_book/#{title}"
-            end
+            # SI LLEGA COMO PARAMETRO UN BOOK SE SELECCIONA EL PATH CON EL BOOK CORRESPONDIENTE
+            # SINO EL PATH INDICA EL DIRECTORIO GLOBAL MY_RNS
+            path = create_path(book, title)
 
             path << ".#{extension}"
 
@@ -110,6 +109,7 @@ module RN
       end
 
       class Edit < Dry::CLI::Command
+        include Path
         desc 'Edit the content a note'
 
         argument :title, required: true, desc: 'Title of the note'
@@ -124,11 +124,9 @@ module RN
         def call(title:, **options)
             book = options[:book]
             #   warn "TODO: Implementar modificación de la nota con título '#{title}' (del libro '#{book}').\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
-            if book != nil
-                path = "#{Dir.home}/.my_rns/#{book}/#{title}"   
-            else
-                path = "#{Dir.home}/.my_rns/global_book/#{title}"
-            end
+            # SI LLEGA COMO PARAMETRO UN BOOK SE SELECCIONA EL PATH CON EL BOOK CORRESPONDIENTE
+            # SINO EL PATH INDICA EL DIRECTORIO GLOBAL MY_RNS
+            path = create_path(book, title)
             extension = "rn"
             path << ".#{extension}"
             
@@ -260,6 +258,7 @@ module RN
       end
 
       class Show < Dry::CLI::Command
+        include Path
         desc 'Show a note'
 
         argument :title, required: true, desc: 'Title of the note'
@@ -275,11 +274,9 @@ module RN
             book = options[:book]
             extension = "rn"
 
-            if book != nil
-                path = "#{Dir.home}/.my_rns/#{book}/#{title}"   
-            else
-                path = "#{Dir.home}/.my_rns/global_book/#{title}"
-            end
+            # SI LLEGA COMO PARAMETRO UN BOOK SE SELECCIONA EL PATH CON EL BOOK CORRESPONDIENTE
+            # SINO EL PATH INDICA EL DIRECTORIO GLOBAL MY_RNS
+            path = create_path(book, title)
 
             path << ".#{extension}"
             if File.exist?(path)
