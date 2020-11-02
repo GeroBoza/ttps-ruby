@@ -1,5 +1,6 @@
 require_relative "path"
 require 'fileutils'
+require 'tty-editor'
 module RN
   module Commands
     module Notes
@@ -32,11 +33,8 @@ module RN
 
             # SI LLEGA COMO PARAMETRO UN BOOK SE SELECCIONA EL PATH CON EL BOOK CORRESPONDIENTE
             # SINO EL PATH INDICA EL DIRECTORIO GLOBAL MY_RNS
-            if book != nil
-                path = "#{Dir.home}/.my_rns/#{book}/#{title}"   
-            else
-                path = "#{Dir.home}/.my_rns/global_book/#{title}"
-            end
+            path = create_path(book, title)
+            
 
             
 
@@ -50,6 +48,8 @@ module RN
             end
   
             path << ".#{extension}"
+
+           
 
             # VALIDO QUE NO EXISTA LA NOTA
             # SI EXISTE SE CANCELA LA CREACION
@@ -122,8 +122,26 @@ module RN
         ]
 
         def call(title:, **options)
-          book = options[:book]
-          warn "TODO: Implementar modificación de la nota con título '#{title}' (del libro '#{book}').\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+            book = options[:book]
+            #   warn "TODO: Implementar modificación de la nota con título '#{title}' (del libro '#{book}').\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+            if book != nil
+                path = "#{Dir.home}/.my_rns/#{book}/#{title}"   
+            else
+                path = "#{Dir.home}/.my_rns/global_book/#{title}"
+            end
+            extension = "rn"
+            path << ".#{extension}"
+            
+            if File.exist?(path)
+                TTY::Editor.open(path)
+            else 
+                puts "La nota que editar eliminar no existe"
+                return
+            end
+
+            puts "La nota se edito con exito!"
+
+            
         end
       end
 
@@ -209,14 +227,28 @@ module RN
                 Dir.foreach(path) do |f|
                     fn = File.join(path, f)
                     if f != '.' && f != '..'
-                        puts Dir["#{fn}/*"]
+                        # puts Dir["#{fn}/*"]
+                        # puts Dir.entries(fn) if fn != '.' && fn != '..'
+                        if !Dir.empty?(fn)
+                            puts "NOTAS DEL BOOK: #{fn}"
+                            i = 0
+                            Dir.entries(fn).each do |filename|
+                                puts "- " + filename unless filename =~ /^..?$/
+                            end
+                        else
+                            puts "NOTAS DEL BOOK: #{fn}"
+                            puts "vacio"
+                        end
                     end
                 end
                 return
             end
             if File.exist?(path)
-                if Dir["#{path}/*"].length >0
-                    puts Dir["#{path}/*"]   
+                if !Dir["#{path}/*"].empty?
+                    puts "NOTAS DEL BOOK #{path}"   
+                    Dir.entries(path).each do |filename|
+                        puts "- " + filename unless filename =~ /^..?$/
+                    end
                 else
                     puts "El libro seleccionado no contiene notas"
                 end   
