@@ -59,11 +59,16 @@ module RN
                 global = options[:global]
                 
                 # SI RECIBO EL --GLOBAL SE EJECUTA EL FOR QUE ELIMINA LOS ARCHIVOS DEL DIRECTORIO GLOBAL SIN ELIMINAR EL DIRECTORIO
+                global_path = "#{Dir.home}/.my_rns/global_book"
+                if !File.directory?(global_path)
+                    puts "No existe el directorio principal my_rns, intente creando un nuevo libro o una nueva nota"
+                    return
+                end
+
                 if global 
                     puts "Esta seguro que quiere eliminar las notas del libro global? Y/N"
                     value = STDIN.gets.chomp
                     if value.downcase == "y"
-                        global_path = "#{Dir.home}/.my_rns/global_book"
                         Dir.foreach(global_path) do |f|
                             fn = File.join(global_path, f)
                             File.delete(fn) if f != '.' && f != '..'
@@ -91,12 +96,12 @@ module RN
                     value = STDIN.gets.chomp
                     if value.downcase == "y"
                         FileUtils.rm_rf(path)
-                        puts "El Libro y su contenido ha sido eliminado!"                        
+                        puts "El Libro '#{name}' y su contenido ha sido eliminado!"                        
                     else
-                        puts "Su Libro no se ha eliminado"    
+                        puts "El Libro '#{name}' no se ha eliminado"    
                     end
                 else
-                    warn "El libro que quiere eliminar no existe!"
+                    warn "El libro '#{name}' no existe y no se ha eliminado!"
                 end
 
             end
@@ -107,6 +112,10 @@ module RN
 
         def call(*)
             path = "#{Dir.home}/.my_rns"
+            if !File.exist?(path)
+                puts "No se puede listar ya que no existe el book my_rns, intente creando una nota o un nuevo book"
+                return 
+            end
             Dir.foreach(path) do |f|
                 fn = File.join(path, f)
                 puts fn if f != '.' && f != '..'
@@ -130,8 +139,14 @@ module RN
         def call(old_name:, new_name:, **)
             path = "#{Dir.home}/.my_rns"
 
+            if !File.directory?(path) 
+                puts "No existe el directorio principal my_rns, intente creando un nuevo libro o una nueva nota"
+                return
+            end
+
+            old_book_path = "#{path}/#{old_name}"
             # CHEQUEO QUE NO SE QUIERA EDITAR EL LIBRO GLOBAL
-            if "#{path}/#{old_name}".match("global_book")
+            if old_book_path.match("global_book")
                 warn "El libro global no puede ser editado"
                 return
             end
@@ -142,7 +157,17 @@ module RN
                 return
             end
 
-            # FALTA CHEQUEAR QUE EXISTA EL LIBRO QUE QUIERO EDITAR
+            # CHEQUEO QUE EXISTA EL LIBRO QUE QUIERO RENOMBRAR
+            if !File.directory?(old_book_path) 
+                puts "El libro que quiere renombrar no existe"
+                return
+            end
+
+            #CHEQUEO QUE EL NUEVO NOMBRE NO EXISTA COMO UN BOOK
+            if File.directory?("#{path}/#{new_name}") 
+                puts "El libro '#{new_name}' ya existe, pruebe con otro nombre"
+                return
+            end
 
             FileUtils.mv "#{path}/#{old_name}", "#{path}/#{new_name}"
             puts "El libro #{old_name} ha sido renombrado por #{new_name}"

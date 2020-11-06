@@ -213,6 +213,8 @@ module RN
             book = options[:book]
             global = options[:global]
 
+
+
             # ME GUARDO EL PATH SEGUN LOS PARAMETROS RECIBIDOS
             if global
                 path = "#{Dir.home}/.my_rns/global_book"
@@ -221,7 +223,11 @@ module RN
             else 
                 # SI NO LLEGA NINGUN PARAMETRO RECORRO TODOS LOS LIBROS E IMPRIMO TODAS LAS NOTAS 
                 # QUE CONTIENEN LOS LIBROS DE MY_RNS
-                path = "#{Dir.home}/.my_rns" 
+                path = "#{Dir.home}/.my_rns"
+                if !File.exist?(path)
+                    puts "No se puede listar ya que no existe el book my_rns, intente creando una nota o un nuevo book"
+                    return 
+                end
                 Dir.foreach(path) do |f|
                     fn = File.join(path, f)
                     if f != '.' && f != '..'
@@ -241,7 +247,7 @@ module RN
                 end
                 return
             end
-            if File.exist?(path)
+            if File.exist?(path) 
                 if !Dir["#{path}/*"].empty?
                     puts "NOTAS DEL BOOK #{path}"   
                     Dir.entries(path).each do |filename|
