@@ -1,4 +1,4 @@
-# Entrega
+# Entrega 1
 
 ## Inicio
 
@@ -15,7 +15,7 @@ Tome la decision de crear un modulo externo `Path`, encargado de realizar 3 func
 Lo llame Path ya que todos los metodos estan relacionados con las rutas.
 
 ```
-    check_my_rns() -> Valida que exista el directorio my_rns y si no existe lo crea
-    valid_name?(a_name) -> Valida que el nombre ingresado al momento de crear un book/note sea valido y no contenga el caracter '/'
-    create_path(book, title) -> Crea la ruta correspondiente
+    - check_my_rns() -> Valida que exista el directorio my_rns y si no existe lo crea
+    - valid_name?(a_name) -> Valida que el nombre ingresado al momento de crear un book/note sea valido y no contenga el caracter '/'
+    - create_path(book, title) -> Crea la ruta correspondiente
 ```
