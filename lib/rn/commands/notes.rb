@@ -17,7 +17,7 @@ module RN
         # ]
 
         def call(title:, **options)            
-            NOTE.create(title, **options)
+            puts NOTE.create(title, **options)
         end
       end
 
@@ -34,7 +34,7 @@ module RN
         ]
 
         def call(title:, **options)
-            NOTE.delete(title, **options)
+            puts NOTE.delete(title, **options)
           end
       end
 
@@ -51,7 +51,7 @@ module RN
         ]
 
         def call(title:, **options)
-            NOTE.edit(title, **options)   
+            puts NOTE.edit(title, **options)   
         end
       end
 
@@ -70,7 +70,7 @@ module RN
         ]
 
         def call(old_title:, new_title:, **options)
-            NOTE.retitle(old_title, new_title, **options)
+            puts NOTE.retitle(old_title, new_title, **options)
         end
       end
 
@@ -88,7 +88,7 @@ module RN
         ]
 
         def call(**options)
-            NOTE.list(**options)    
+            puts NOTE.list(**options)    
         end
       end
 
@@ -106,7 +106,29 @@ module RN
         ]
 
         def call(title:, **options)
-            NOTE.show(title, **options)
+            puts NOTE.show(title, **options)
+        end
+      end
+
+      class Export < Dry::CLI::Command
+        
+        desc 'Export a note'
+
+        option :title, type: :string, desc: 'Title of the note'
+        option :book, type: :string, desc: 'Book'
+        option :all, type: :boolean, default: false, desc: 'All notes'
+
+        example [
+          '"New note" --book "My book" # Exports a note titled "New note" from the book "My book"',
+          'thoughts --book Memoires    # Exports a note titled "thoughts" from the book "Memoires"
+          --all                        # Exports all notes from all books'
+        ]
+
+        def call(**options)
+
+            puts NOTE.export(**options)
+            
+           
         end
       end
     end

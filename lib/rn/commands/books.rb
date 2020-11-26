@@ -14,7 +14,7 @@ module RN
         # ]
 
         def call(name:, **)
-            BOOK.create(name)
+            puts BOOK.create(name)
         end
       end
 
@@ -32,7 +32,7 @@ module RN
             ]
             
             def call(name: nil, **options)               
-                BOOK.delete(name, **options)
+                puts BOOK.delete(name, **options)
             end
       end
 
@@ -40,7 +40,7 @@ module RN
         desc 'List books'
 
         def call(*)
-            BOOK.list()
+            puts BOOK.list()
         end
       end
 
@@ -58,7 +58,7 @@ module RN
 
         def call(old_name:, new_name:, **)
             
-            BOOK.rename(old_name, new_name)
+            puts BOOK.rename(old_name, new_name)
             
         end
       end
