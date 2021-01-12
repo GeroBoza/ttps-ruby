@@ -38,7 +38,7 @@ h2 {
     flex-direction: column;
     justify-content: center;
     width: 100%;
-    min-height: 70%;
+    min-height: 100%;
     padding: 20px;
 }
 
@@ -264,7 +264,7 @@ input[type="text"]:placeholder {
 }
 
 .underlineHover:hover {
-    color: #0d0d0d;
+    color: #ffffff;
 }
 
 .underlineHover:hover:after {
