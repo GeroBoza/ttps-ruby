@@ -17,7 +17,7 @@
       <tr>
         <td><%= book.user_id %></td>
         <td><%= book.name %></td>
-        <td><%= link_to 'Show', [@user, book] %></td>
+        <td><%= link_to 'Show', user_book_notes_path(@user, book) %></td>
         <td><%= link_to 'Edit', edit_user_book_path(@user, book) %></td>
         <td><%= link_to 'Destroy', [@user, book], method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
@@ -27,4 +27,4 @@
 
 <br>
 
-<%= link_to 'New Book', new_user_book_path(@user) %>
+<%= link_to 'New Book', new_user_book_path(@user), class: 'btn btn-primary link-boton-primary' %>

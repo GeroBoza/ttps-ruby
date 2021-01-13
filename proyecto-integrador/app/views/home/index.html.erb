@@ -3,7 +3,7 @@
     <% if current_user.present? %>
     <h4>Welcome <%= current_user %></h4>
 
-        <%= button_to  "My Books", new_user_session_path ,class: 'btn btn-primary' %>
+        <%= link_to  "My Books", user_books_path(current_user.id) ,class: 'btn btn-primary link-boton-primary' %>
     <%end%>
 </div>
 

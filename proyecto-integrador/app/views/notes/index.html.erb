@@ -5,6 +5,9 @@
 <table>
   <thead>
     <tr>
+      <th>Book</th>
+      <th>Title</th>
+      <th>Content</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -12,9 +15,12 @@
   <tbody>
     <% @notes.each do |note| %>
       <tr>
-        <td><%= link_to 'Show', note %></td>
-        <td><%= link_to 'Edit', edit_note_path(note) %></td>
-        <td><%= link_to 'Destroy', note, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= note.book_id %></td>
+        <td><%= note.title %></td>
+        <td><%= note.content %></td>
+        <td><%= link_to 'Show', [@user,@book, note] %></td>
+        <td><%= link_to 'Edit', edit_user_book_note_path(@user,@book, note) %></td>
+        <td><%= link_to 'Destroy', [@user,@book, note], method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
@@ -22,4 +28,4 @@
 
 <br>
 
-<%= link_to 'New Note', new_note_path %>
+<%= link_to 'New Note', new_user_book_note_path(@book) %>

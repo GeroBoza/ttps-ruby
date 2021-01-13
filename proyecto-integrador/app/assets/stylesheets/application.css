@@ -17,3 +17,8 @@ body {
     margin: 0;
     padding: 0;
 }
+
+.link-boton-primary {
+    text-decoration: none;
+    color: white !important;
+}

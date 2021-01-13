@@ -7,15 +7,14 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav" style="margin-left: auto"> 
       <% if user_signed_in? %>
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                My Account
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <li><a class="dropdown-item" href="#">My Books</a></li>
-                <%= link_to  "Log Out", destroy_user_session_path, method: :delete, class: 'dropdown-item' %>
-            </ul>
+        <li class="nav-item">
+          <%= link_to "My Books", user_books_path(current_user.id) ,class: "nav-link" %>
         </li>
+        <li class="nav-item">
+          <%= link_to  "Log Out", destroy_user_session_path, method: :delete, class: 'nav-link', data: { confirm: 'Are you sure?' } %>
+        </li>
+            
+        
       <% else %>
        <li class="nav-item">
           <%= link_to  "Log In", new_user_session_path, class: 'nav-link' %>

@@ -5,6 +5,6 @@ class Book < ApplicationRecord
   validates :name, presence: true, uniqueness: true, length: { maximum: 255 }
 
   def to_s
-    title
+    name
   end
 end
