@@ -3,8 +3,12 @@
     <% if current_user.present? %>
     <h4>Welcome <%= current_user %></h4>
 
-        <%= link_to  "My Books", user_books_path(current_user.id) ,class: 'btn btn-primary link-boton-primary' %>
+        <%= link_to  "My Books", user_books_path(current_user.id) ,class: 'btn btn-primary text-white' %>
     <%end%>
+
+<div class="mt-5">
+    <img src="https://aldibs.com/wp-content/uploads/2020/01/ruby-on-rails-development.jpg" style="border-radius: 10px" alt="ruby background">
+    </div>
 </div>
 
 

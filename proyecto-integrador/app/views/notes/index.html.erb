@@ -1,13 +1,14 @@
-<p id="notice"><%= notice %></p>
 
-<h1>Notes</h1>
 
-<table>
+<h1 class="text-center mt-5 mb-3">Notes from Book: '<%= @book %>'</h1>
+<hr>
+<% if @notes.length > 0 %>
+<table class="table table-hover">
   <thead>
     <tr>
-      <th>Book</th>
-      <th>Title</th>
-      <th>Content</th>
+      <th scope="col">Book ID</th>
+      <th scope="col">Title</th>
+      <th scope="col">Content</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -15,17 +16,25 @@
   <tbody>
     <% @notes.each do |note| %>
       <tr>
-        <td><%= note.book_id %></td>
+        <th scope="row"> <%= note.book_id %></th>
         <td><%= note.title %></td>
         <td><%= note.content %></td>
-        <td><%= link_to 'Show', [@user,@book, note] %></td>
-        <td><%= link_to 'Edit', edit_user_book_note_path(@user,@book, note) %></td>
-        <td><%= link_to 'Destroy', [@user,@book, note], method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'HTML', [@user,@book, note], class: 'btn btn-primary text-white' %></td>
+        <td><%= link_to 'Edit', edit_user_book_note_path(@user,@book, note), class: 'btn btn-warning' %></td>
+        <td><%= link_to 'Destroy', [@user,@book, note], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger text-white' %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
+<% else %>
+    <h3 class="text-center">You don't have notes in this book. Add one!</h3>
+<% end %>
 <br>
+<div class="row justify-content-center">
+    <div class="col-12 text-center">
+        <%= link_to 'New Note', new_user_book_note_path(@book), class: 'btn btn-primary text-white' %>
+        <%= link_to 'Back', user_books_path(@book), class: 'btn btn-warning' %>
+    </div>
+   
 
-<%= link_to 'New Note', new_user_book_note_path(@book) %>
+</div>

@@ -1,4 +1,5 @@
 class NotesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_user
   before_action :set_book
   before_action :set_note, only: [:show, :edit, :update, :destroy]
@@ -49,7 +50,7 @@ class NotesController < ApplicationController
 
   private
     def set_user
-      @user = User.find(params[:user_id])
+      @user = User.find(current_user.id)
     end
 
     def set_book

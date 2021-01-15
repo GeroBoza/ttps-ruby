@@ -1,4 +1,5 @@
 class BooksController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_user
   before_action :set_book, only: [:show, :edit, :update, :destroy]
 
@@ -9,6 +10,7 @@ class BooksController < ApplicationController
 
   # GET /books/1
   def show
+    redirect_to user_book_notes_path(@user,@book)
   end
 
   # GET /books/new
@@ -34,7 +36,7 @@ class BooksController < ApplicationController
   # PATCH/PUT /books/1
   def update
     if @book.update(book_params)
-      redirect_to [@user,@book], notice: 'Book was successfully updated.'
+      redirect_to user_books_path(@user,@book), notice: 'Book was successfully updated.'
     else
       render :edit
     end
