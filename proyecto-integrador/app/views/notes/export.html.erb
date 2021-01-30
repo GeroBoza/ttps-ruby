@@ -1,0 +1,11 @@
+<h1 class="text-center mt-4">
+    Exported File/s in HTML
+</h1>
+
+<div class="row w-50 mt-4 mx-auto">
+    <hr >
+    <%= markdown(@note.content) %>
+    <div>
+        <%= link_to 'Back', user_book_notes_path,class: 'btn btn-warning text-white' %>
+    </div>
+</div>

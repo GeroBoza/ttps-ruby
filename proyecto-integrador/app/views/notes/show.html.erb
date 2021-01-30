@@ -1,10 +1,11 @@
+<div class="row w-50 mt-4 mx-auto">
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Book:</strong>
-  <%= @note.book_id %>
-</p>
+<h1>
+  <strong>Note from Book:</strong>  <%= @note.book %>
+</h1>
 
+<hr>
 <p>
   <strong>Title:</strong>
   <%= @note.title %>
@@ -15,5 +16,8 @@
   <%= @note.content %>
 </p>
 
-<%= link_to 'Edit', edit_user_book_note_path(@user,@book,@note) %> |
-<%= link_to 'Back', user_book_notes_path %>
+<div>
+    <%= link_to 'Edit', edit_user_book_note_path(@user,@book,@note),class: 'btn btn-primary text-white' %> 
+    <%= link_to 'Back', user_book_notes_path,class: 'btn btn-warning text-white' %>
+</div>
+</div>

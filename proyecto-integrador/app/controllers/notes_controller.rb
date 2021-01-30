@@ -3,6 +3,7 @@ class NotesController < ApplicationController
   before_action :set_user
   before_action :set_book
   before_action :set_note, only: [:show, :edit, :update, :destroy]
+  before_action :set_note_id, only: [:export]
 
   # GET /notes
   def index
@@ -48,6 +49,9 @@ class NotesController < ApplicationController
     redirect_to user_book_notes_url, notice: 'Note was successfully destroyed.'
   end
 
+  def export
+  end
+
   private
     def set_user
       @user = User.find(current_user.id)
@@ -60,6 +64,10 @@ class NotesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_note
       @note = @book.notes.find(params[:id])
+    end
+
+    def set_note_id
+      @note = @book.notes.find(params[:note_id])
     end
 
     # Only allow a list of trusted parameters through.

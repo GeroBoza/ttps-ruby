@@ -57,3 +57,6 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # DEVISE
 gem 'devise'
+
+# EXPORT GEM
+gem 'redcarpet'
