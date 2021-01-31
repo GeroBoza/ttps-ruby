@@ -18,8 +18,14 @@
         <th scope="row"><%= book.user_id %></th >
         <td><%= book.name %></td>
         <td><%= link_to 'Notes', user_book_notes_path(@user, book), class: 'btn btn-primary text-white' %></td>
-        <td><%= link_to 'Edit', edit_user_book_path(@user, book), class: 'btn btn-secondary text-white' %></td>
-        <td><%= link_to 'Destroy', [@user, book], method: :delete, data: { confirm: 'Are you sure? All notes in this book will be deleted' }, class: 'btn btn-danger text-white' %></td>
+        <% if (book.name != "Global Book")  %>
+            <td><%= link_to 'Edit', edit_user_book_path(@user, book), class: 'btn btn-secondary text-white' %></td>
+            <td><%= link_to 'Destroy', [@user, book], method: :delete, data: { confirm: 'Are you sure? All notes in this book will be deleted' }, class: 'btn btn-danger text-white' %></td>
+        <% else %>
+            <td><%= link_to 'Edit', edit_user_book_path(@user, book), class: 'btn btn-secondary text-white disabled' %></td>
+            <td><%= link_to 'Destroy', [@user, book], method: :delete, data: { confirm: 'Are you sure? All notes in this book will be deleted' }, class: 'btn btn-danger text-white disabled' %></td>
+
+        <%end%>
       </tr>
     <% end %>
   </tbody>
