@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     
     resources :users do
         resources :books do
+            get "export_book_notes"
             resources :notes do
                 get "export"
             end

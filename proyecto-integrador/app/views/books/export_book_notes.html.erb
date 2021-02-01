@@ -1,0 +1,4 @@
+<% @book.notes.each do |note| %>
+    <%= markdown(note.content) %>
+    <hr>
+<% end %>

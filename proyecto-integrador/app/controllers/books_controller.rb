@@ -2,6 +2,7 @@ class BooksController < ApplicationController
   before_action :authenticate_user!
   before_action :set_user
   before_action :set_book, only: [:show, :edit, :update, :destroy]
+  before_action :set_book_export_notes , only: [:export_book_notes]
 
   # GET /books
   def index
@@ -52,6 +53,9 @@ class BooksController < ApplicationController
     end
   end
 
+  def export_book_notes
+  end
+
   private
 
     def set_user
@@ -60,6 +64,10 @@ class BooksController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_book
       @book = @user.books.find(params[:id])
+    end
+
+    def set_book_export_notes
+      @book = @user.books.find(params[:book_id])
     end
 
     # Only allow a list of trusted parameters through.

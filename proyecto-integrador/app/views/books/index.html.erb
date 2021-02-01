@@ -9,7 +9,7 @@
     <tr>
       <th scope="col">User ID</th>
       <th scope="col">Name</th>
-      <th colspan="3"></th>
+      <th colspan="4"></th>
     </tr>
   </thead>
   <tbody>
@@ -17,7 +17,9 @@
       <tr>
         <th scope="row"><%= book.user_id %></th >
         <td><%= book.name %></td>
+
         <td><%= link_to 'Notes', user_book_notes_path(@user, book), class: 'btn btn-primary text-white' %></td>
+        <td><%= link_to 'HTML', user_book_export_book_notes_path(@user, book), class: 'btn btn-success text-white' %></td>
         <% if (book.name != "Global Book")  %>
             <td><%= link_to 'Edit', edit_user_book_path(@user, book), class: 'btn btn-secondary text-white' %></td>
             <td><%= link_to 'Destroy', [@user, book], method: :delete, data: { confirm: 'Are you sure? All notes in this book will be deleted' }, class: 'btn btn-danger text-white' %></td>
