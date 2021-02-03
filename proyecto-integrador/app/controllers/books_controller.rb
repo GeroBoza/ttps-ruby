@@ -36,20 +36,24 @@ class BooksController < ApplicationController
 
   # PATCH/PUT /books/1
   def update
-    if @book.update(book_params)
-      redirect_to user_books_path(@user,@book), notice: 'Book was successfully updated.'
+    if @book.name != "Global Book"
+        if @book.update(book_params)
+            redirect_to user_books_path(@user,@book), notice: 'Book was successfully updated.'
+        else
+            render :edit
+        end
     else
-      render :edit
+        redirect_to user_books_url, alert: "Global Book can't be edited."
     end
   end
 
   # DELETE /books/1
   def destroy
-    if ((@book.name != "Global Book") || (@book.id != 1))
+    if @book.name != "Global Book"
         @book.destroy
         redirect_to user_books_url, notice: 'Book was successfully destroyed.'
     else
-        redirect_to user_books_url, alert: "Global Book cant't be deleted."
+        redirect_to user_books_url, alert: "Global Book can't be deleted."
     end
   end
 
