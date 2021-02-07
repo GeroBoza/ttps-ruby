@@ -1,5 +1,5 @@
-#TTPS RUBY
-<br>
+# TTPS RUBY
+
 `El repositorio esta dividido en 2 carpetas: `
 
 -   TP-I<br>

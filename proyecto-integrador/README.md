@@ -1,24 +1,32 @@
-# README
+# Trabajo integrador final RAILS
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Instrucciones
 
-Things you may want to cover:
+Los pasos a seguir para la ejecución del proyecto son:
 
-* Ruby version
+* Posicionarse en el directorio raiz del proyecto
 
-* System dependencies
+* Ejecutar el comando `bundle install` para instalar todas las dependencias
 
-* Configuration
+* Ejecutar el comando `rails db:migrate` para crear la base de datos
 
-* Database creation
+* Ejecutar el comando `rails db:seed` para ejecutar los seeds creados
 
-* Database initialization
+* Ejecutar `rails s` para levantar la aplicación en `localhost:300`
 
-* How to run the test suite
+## Seeds
+* Al ejecutar el comando `rails db:seed` se crearán 3 ususarios distintos, con email `seed_userX@gmail.com` y password `123456` con `X = 0/1/2` y dentro de estos 3 usuarios, se crearan books y notes ya predefinidas
 
-* Services (job queues, cache servers, search engines, etc.)
+## General
+* La aplicación se basa en la creación de usuarios, books, y notas. Permitiendo a un usuario crear distintos books que contengan distintas notas. Cada usuario al registrarse tiene un book global inicial que no puede ser editado ni eliminado.
 
-* Deployment instructions
+* Utilicé bootstrap para los estilos de la aplicación.
 
-* ...
+* Tomé la decisión de utilizar la gema recomendada `DEVISE` para la autenticación y autorización del usuario, modificando el método `create` para poder agregarle el `Global Book` a los usuarios que se registren en la aplicación.
+
+* La funcionalidad más importante de la aplicación es la de exportar las `NOTES`, en formato `HTML`. Para esto utilicé una gema llamada `redcarpet` que permite convertir un texto en `MD` a un formato de texto rico, en este caso HTML.<br>
+Se generó un botón tanto para la exportación de una `NOTE` en particular, como para la exportación de las notas de un `BOOK` particular, y también para la exportación de todas las notas del usuario.
+
+## Gemas
+* DEVISE
+* REDCARPET
