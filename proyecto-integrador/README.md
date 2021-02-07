@@ -28,5 +28,5 @@ Los pasos a seguir para la ejecución del proyecto son:
 Se generó un botón tanto para la exportación de una `NOTE` en particular, como para la exportación de las notas de un `BOOK` particular, y también para la exportación de todas las notas del usuario.
 
 ## Gemas
-* DEVISE
-* REDCARPET
+* <a href="https://github.com/heartcombo/devise" target="_blank">DEVISE</a>
+* <a href="https://github.com/vmg/redcarpet" target="_blank">REDCARPET</a>
