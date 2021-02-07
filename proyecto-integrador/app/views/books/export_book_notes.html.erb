@@ -1,4 +1,20 @@
-<% @book.notes.each do |note| %>
-    <%= markdown(note.content) %>
-    <hr>
-<% end %>
+<div class="row w-50 mt-4 mx-auto">
+<% if @book.notes.length > 0 %>
+    <h1 class="text-center"> Exported files from: <span style="color:red">"<%= @book %>"</span> </h1>
+    <% @book.notes.each do |note| %>
+        <div style="border: 2px solid grey; margin:5px; border-radius: 10px">
+            <h2 style="text-align: center">NOTE: <span style="color: red;">'<%=  note.title %>'</span> </h2>
+            <hr>
+            <div style="background-color: #80808052; border-radius: 5px">
+                <%= markdown(note.content) %>
+            </div>
+        </div>
+    <% end %>
+    <% else %>
+        <h1>You don't have notes in this book!</h1>
+    <%end%>
+    <div class="mt-4 mb-4">
+        <%= link_to 'Back', user_books_path, class: 'btn btn-warning' %>
+    </div>
+
+</div>
