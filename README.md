@@ -1,4 +1,4 @@
-#TTPS RUBY
+# TTPS RUBY
 <br>
 `El repositorio esta dividido en 2 carpetas: `
 
