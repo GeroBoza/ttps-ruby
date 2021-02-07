@@ -1,11 +1,3 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
-
 3.times do |i|
     u = User.create! :email => "seed_user#{i}@gmail.com" , :password => '123456', :password_confirmation => '123456'
     global = u.books.create(user_id: u.id,name:"Global Book")
@@ -68,8 +60,7 @@ $ rn [args]
                 
                 * Services (job queues, cache servers, search engines, etc.)
                 
-                * Deployment instructions
-                ")
+                * Deployment instructions")
         end
     end
 end
