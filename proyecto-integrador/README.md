@@ -12,7 +12,7 @@ Los pasos a seguir para la ejecución del proyecto son:
 
 * Ejecutar el comando `rails db:seed` para ejecutar los seeds creados
 
-* Ejecutar `rails s` para levantar la aplicación en `localhost:300`
+* Ejecutar `rails s` para levantar la aplicación en `localhost:3000`
 
 ## Seeds
 * Al ejecutar el comando `rails db:seed` se crearán 3 ususarios distintos, con email `seed_userX@gmail.com` y password `123456` con `X = 0/1/2` y dentro de estos 3 usuarios, se crearan books y notes ya predefinidas
