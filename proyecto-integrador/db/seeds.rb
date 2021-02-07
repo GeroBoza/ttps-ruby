@@ -9,43 +9,41 @@
 3.times do |i|
     u = User.create! :email => "seed_user#{i}@gmail.com" , :password => '123456', :password_confirmation => '123456'
     global = u.books.create(user_id: u.id,name:"Global Book")
-    global.notes.create(book_id: global.id , title: "seed notes" , content: "# Entrega 1
-        ## Estructura
-        Existe una carpeta .my_rns que es la que va a contener los cuadernos y dentro de los cuadernos las notas. Dentro de éste hay un cuaderno_global que es el cuaderno que queda por defecto si no se indica que cuaderno usar.
-        A la hora de crear un cuaderno si no existe la carpeta .my_rns se crea dicha carpeta con el cuaderno_global dentro y a demas el libro que se solicitó crear.
-        
-        ## Instalación
-        Se debe ejecutar el siguiente comando posicionado en /rubyTP-1
-        ```
-        bundle install
-        ```
-        
-        ## Uso 
-        La primera vez se debe ejecutar el siguiente comando posicionado en /rubyTP-1 y cada vez que se cierre la consola tambien
-        ```
-        export PATH=$(pwd)/bin:$PATH
-        ```
-        Una vez hecho eso a la hora de usarlo, posicionado en /rubyTP-1 ejecutar el siguiente comando para poder utilizar el programa
-        ```
-        rn [args]
-        ```
-        
-        ## Aclaración
-        A la hora de crear o renombrar una nota o un libro , si se envia el nombre encerrado en comillas (ejemplo libro1 o nota1) se va a crear el nombre con las comillas si esto no se quiere se deben colocar todos los nombres sin comillas para no tener este problema.
-        
-        ## TTY:Editor
-        A la hora de crear una nota o editarla se va a utiilizar TTY:Editor el cual te permite elegir que editor de texto usar
-        
-        ```
-        Select an editor? 
-          1) nano -w
-          2) vi
-          3) code
-          4) pico
-          Choose 1-4 [1]: 
-        ```
-        
-        [fuente](https://github.com/piotrmurach/tty-editor)")
+    global.notes.create(book_id: global.id , title: "seed notes" , content: "## Uso de `rn`
+
+Para ejecutar el comando principal de la herramienta se utiliza el script `bin/rn`, el cual
+puede correrse de las siguientes manera:
+
+```bash
+$ ruby bin/rn [args]
+```
+
+O bien:
+
+```bash
+$ bundle exec bin/rn [args]
+```
+
+O simplemente:
+
+```bash
+$ bin/rn [args]
+```
+
+Si se agrega el directorio `bin/` del proyecto a la variable de ambiente `PATH` de la shell,
+el comando puede utilizarse sin prefijar `bin/`:
+
+```bash
+# Esto debe ejecutarse estando ubicad@ en el directorio raiz del proyecto, una única vez
+# por sesión de la shell
+$ export PATH='$(pwd)/bin:$PATH'
+$ rn [args]
+```
+
+> Notá que para la ejecución de la herramienta, es necesario tener una versión reciente de
+> Ruby (2.5 o posterior) y tener instaladas sus dependencias, las cuales se manejan con
+> Bundler. Para más información sobre la instalación de las dependencias, consultar la
+> siguiente sección ('Desarrollo').")
 
     3.times do |f|
         book = u.books.create(user_id: u.id,name:"book#{f}")
@@ -71,8 +69,6 @@
                 * Services (job queues, cache servers, search engines, etc.)
                 
                 * Deployment instructions
-                
-                * ...
                 ")
         end
     end
